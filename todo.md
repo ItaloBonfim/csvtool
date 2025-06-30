@@ -8,3 +8,4 @@
 Listagem de problemas e questões a serem tratadas.
 1. [ ] Descoberto um problema referente aos filtros nos resultados da busca. Atualmente os filtros funcionam por páginas e não fazem uma busca na base de dados para obter os dados precisos de acordo com o filtro.
 2. [ ] Atualmente toda funcionalidade que depende de Javascript para funcionar está fortemente ligada a blocos de script dentro de arquivos html, e apesar de não causar problemas inicialmente, é bem verdade que isso pode ser abstraído para arquivos próprios.
+3. [ ] Atualizar a função  ```exportCsvAsync``` para um modelo mais especializado utilizando o conceito de KISS. 
