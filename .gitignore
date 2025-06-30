@@ -1,6 +1,7 @@
 HELP.md
 devdocker-compose.yml
 target/
+exports/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

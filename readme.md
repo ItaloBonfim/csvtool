@@ -69,4 +69,4 @@ cd csvtool
 Abra o projeto em sua IDE, aguarde o Flyway criar as tabelas automaticamente e rode a aplicação CsvToolApplication.
 
 ### Docker hub
-docker run -p 8080:8080 proitalosouza/csvtool:latest
+docker run proitalosouza/csvtool:lateast
