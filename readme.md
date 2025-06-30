@@ -44,7 +44,7 @@ Para esse projeto em especifico, a base do csv consiste no seguinte padrão:
 ### Linhas/dados
 ```Devinne,Gorthy,dgorthy0@over-blog.com,Female,211.43.226.128,26,16/2/16419692```
 
----
+
 Todos esses dados devem estar concatenados na coluna A e na quantidade de linhas que você conseguir carregar dentro de um csv
 o sistema ira carregar esses dados de forma assincrona e em lotes. Isso permite melhor processamento e eficiencia ao processar os dados
 ---
@@ -59,6 +59,14 @@ o sistema ira carregar esses dados de forma assincrona e em lotes. Isso permite 
 
 ### 1. Clone o projeto
 
-```bash
+```bash```
 git clone https://github.com/ItaloBonfim/csvtool.git
 cd csvtool
+
+### 2 Suba o banco de dados
+```docker-compose up -d```
+
+### 3 Execute o projeto
+Abra o projeto em sua IDE, aguarde o Flyway criar as tabelas automaticamente e rode a aplicação CsvToolApplication.
+
+
