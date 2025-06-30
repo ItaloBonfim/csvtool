@@ -40,9 +40,11 @@
 CSV's podem possuir muito formatos diferentes, e colocar todos eles dentro de uma unica ferramente é um baita desafio.
 Para esse projeto em especifico, a base do csv consiste no seguinte padrão:
 ### Header
-**Nome,SobreNome,Email,Sexo,IpAcesso,Idade,Nascimento**
+```Nome,SobreNome,Email,Sexo,IpAcesso,Idade,Nascimento```
 ### Linhas/dados
-**Devinne,Gorthy,dgorthy0@over-blog.com,Female,211.43.226.128,26,16/2/16419692** \
+```Devinne,Gorthy,dgorthy0@over-blog.com,Female,211.43.226.128,26,16/2/16419692```
+
+---
 Todos esses dados devem estar concatenados na coluna A e na quantidade de linhas que você conseguir carregar dentro de um csv
 o sistema ira carregar esses dados de forma assincrona e em lotes. Isso permite melhor processamento e eficiencia ao processar os dados
 ---
