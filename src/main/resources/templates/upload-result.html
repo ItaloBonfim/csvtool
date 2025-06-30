@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>File Results</title>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2>CSV results</h2>
+        <div class="container mt-5">
+
+            <form th:action="@{/confirm-upload}" method="post" class="flex p-2 ml-2">
+                <input type="hidden" name="id" th:value="${upload.id}" />
+                <th:block >
+                    <a href="/" class="btn btn-primary mb-3">Inicio</a>
+                    <a href="/upload" class="btn btn-primary mb-3">Novo upload</a>
+                    <button th:if="${!readonly}" class="btn btn-primary mb-3" type="submit">Salvar dados</button>
+                </th:block>
+            </form>
+
+        </div>
+
+        <div class="d-flex p-2 m-2 flex-row border">
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Quantidade total de mulheres</span>
+                <span th:text="${femaleQuantity}"></span>
+            </span>
+
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Quantidade total de homens</span>
+                <span th:text="${maleQuantity}"></span>
+            </span>
+
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Quantidade de gêneros variados</span>
+                <span th:text="${otherGenres}"></span>
+            </span>
+
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Média da idade das mulheres</span>
+                <span th:text="${#numbers.formatDecimal(femaleAverage, 1, 1)}"></span>
+            </span>
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Média da idade dos homens</span>
+                <span th:text="${#numbers.formatDecimal(maleAverage, 1, 1)}"></span>
+            </span>
+            <span class="d-flex flex-column m-2 text-center">
+                <span class="fw-semibold">Média da idade</span>
+                <span th:text="${#numbers.formatDecimal(ageAverage, 1, 1)}"></span>
+            </span>
+
+        </div>
+
+        <div class="row mb-4">
+            <h2>Filtros</h2>
+            <div class="col">
+                <input type="text" id="filterName" class="form-control" placeholder="Filtrar por nome">
+            </div>
+            <div class="col">
+                <input type="text" id="filterMiddlename" class="form-control" placeholder="Filtrar por sobrenome">
+            </div>
+            <div class="col">
+                <input type="text" id="filterEmail" class="form-control" placeholder="Filtrar por email">
+            </div>
+
+        </div>
+
+
+        <div class="container container mt-5 p-4 border rounded-5">
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Sobrenome</th>
+                        <th>Email</th>
+                        <th>Gênero</th>
+                        <th>IP de acesso</th>
+                        <th>Idade</th>
+                        <th>Data de nascimento (aproximada)</th>
+                        <th th:if="${!readonly}">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tableBody" th:fragment="tableBody">
+                    <th:block th:with="pageNum=${currentPage != null ? currentPage : 1}" class="data-row">
+
+                        <tr th:each="row, value : ${rows}">
+                            <td th:text="${(pageNum - 1) * 20 + value.index + 1}" class="text-center"></td>
+                            <td th:text="${row.name}" class="name text-center"></td>
+                            <td th:text="${row.middlename}" class="middlename text-center"></td>
+                            <td th:text="${row.email}" class="email text-center"></td>
+
+                            <td class="text-center">
+                                <th:block th:switch="${row.gender}">
+                                    <span th:case="${T(com.multiportal.csvtool.csvimport.EnumTypes.GenderEnum).Male}">Masculino</span>
+                                    <span th:case="${T(com.multiportal.csvtool.csvimport.EnumTypes.GenderEnum).Female}">Feminino</span>
+                                    <span th:case="${T(com.multiportal.csvtool.csvimport.EnumTypes.GenderEnum).NoBinary}">Não Binario</span>
+                                    <spa th:case="*">n/a</spa>
+                                </th:block>
+                            </td>
+
+
+                            <td th:text="${row.ipAcess}" class="text-center"></td>
+                            <td th:text="${row.age}" class="text-center"></td>
+                            <td th:text="${#temporals.format(row.ApproximateDateOfbirth, 'dd/MM/yyyy')}" class="text-center"></td>
+                            <td >
+                                <button type="button" class="btn btn-danger text-center"
+                                th:if="${!readonly}"
+                                th:attr="onClick=|removeRow('${row.id}')|">Remover</button>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+
+            <div class="container-sm">
+
+<!--                <nav th:if="${totalPages > 1}">-->
+<!--                    <ul class="pagination d-flex flex-wrap ">-->
+
+<!--                        <li class="page-item d-flex flex-row mb-2 me-2" th:each="i : ${#numbers.sequence(1, totalPages)}">-->
+<!--                            <a class="page-link"-->
+<!--                               th:href="@{/upload-result(id=${uploadId}, page=${i})}"-->
+<!--                                th:text="${T(java.lang.String).format('%02d',i)}"></a>-->
+<!--&lt;!&ndash;                               th:text="${#strings.format('%02d', i)}"></a>&ndash;&gt;-->
+
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
+<!--                -->
+
+
+<!--                <nav th:if="${totalPages > 1}">-->
+<!--                    <ul class="pagination justify-content-center flex-wrap">-->
+
+<!--                        &lt;!&ndash; Botão "Anterior" &ndash;&gt;-->
+<!--                        <li class="page-item" th:if="${startPage > 1}">-->
+<!--                            <a class="page-link"-->
+<!--                               th:href="@{/upload-result(id=${uploadId}, page=${startPage - 1})}">«</a>-->
+<!--                        </li>-->
+
+<!--                        &lt;!&ndash; Números de páginas &ndash;&gt;-->
+<!--                        <li class="page-item mb-2"-->
+<!--                            th:each="i : ${#numbers.sequence(startPage, endPage)}">-->
+<!--                            <a class="page-link"-->
+<!--                               th:href="@{/upload-result(id=${uploadId}, page=${i})}"-->
+<!--                               th:text="${T(java.lang.String).format('%02d', i)}"-->
+<!--                               th:classappend="${i == currentPage} ? 'active' : ''"></a>-->
+<!--                        </li>-->
+
+<!--                        &lt;!&ndash; Botão "Próximo" &ndash;&gt;-->
+<!--                        <li class="page-item" th:if="${endPage < totalPages}">-->
+<!--                            <a class="page-link"-->
+<!--                               th:href="@{/upload-result(id=${uploadId}, page=${endPage + 1})}">»</a>-->
+<!--                        </li>-->
+
+<!--                    </ul>-->
+<!--                </nav>-->
+
+                <nav th:if="${totalPages > 1}">
+                    <ul class="pagination justify-content-center flex-wrap">
+
+                        <!-- Ir para a primeira página -->
+                        <li class="page-item" th:if="${startPage > 1}">
+                            <a class="page-link"
+                               th:href="@{/upload-result(id=${uploadId}, page=1)}">««</a>
+                        </li>
+
+                        <!-- Ir para o bloco anterior -->
+                        <li class="page-item" th:if="${startPage > 1}">
+                            <a class="page-link"
+                               th:href="@{/upload-result(id=${uploadId}, page=${startPage - 1})}">«</a>
+                        </li>
+
+                        <!-- Números de páginas -->
+                        <li class="page-item mb-2"
+                            th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                            <a class="page-link"
+                               th:href="@{/upload-result(id=${uploadId}, page=${i})}"
+                               th:text="${T(java.lang.String).format('%02d', i)}"
+                               th:classappend="${i == currentPage} ? 'active' : ''"></a>
+                        </li>
+
+                        <!-- Ir para o próximo bloco -->
+                        <li class="page-item" th:if="${endPage < totalPages}">
+                            <a class="page-link"
+                               th:href="@{/upload-result(id=${uploadId}, page=${endPage + 1})}">»</a>
+                        </li>
+
+                        <!-- Ir para a última página -->
+                        <li class="page-item" th:if="${endPage < totalPages}">
+                            <a class="page-link"
+                               th:href="@{/upload-result(id=${uploadId}, page=${totalPages})}">»»</a>
+                        </li>
+
+                    </ul>
+                </nav>
+
+            </div>
+
+        </div>
+
+    </div>
+<!--    controllers-->
+    <input type="hidden" name="uploadId" th:value="${upload.id}" />
+    <input type="hidden" name="currentPage" th:value="${currentPage}" />
+    <input type="hidden" name="readonly" th:value="${readonly}" />
+
+    <script>
+        function removeRow(personId) {
+            const currentPage = document.querySelector('[name="currentPage"]')?.value || 1;
+            const uploadId = document.querySelector('[name="uploadId"]')?.value;
+
+            fetch(`/remove-row?page=${currentPage}&personId=${personId}&uploadId=${uploadId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]')?.value || '',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('tableBody').innerHTML = html;
+            })
+            .catch(error => console.error('Erro ao remover linha:', error));
+        }
+
+
+
+    function normalize(text) {
+        return text
+            .toLowerCase()
+            .normalize("NFD") // separa acentos de letras
+            .replace(/[\u0300-\u036f]/g, "") // remove acentos
+            .trim();
+    }
+
+    function applyFilters() {
+        const nameFilter = normalize(document.getElementById('filterName').value);
+        const middlenameFilter = normalize(document.getElementById('filterMiddlename').value);
+        const emailFilter = normalize(document.getElementById('filterEmail').value);
+
+        const rows = document.querySelectorAll("#tableBody tr");
+
+        rows.forEach(row => {
+            const name = normalize(row.querySelector(".name")?.textContent || "");
+            const middlename = normalize(row.querySelector(".middlename")?.textContent || "");
+            const email = normalize(row.querySelector(".email")?.textContent || "");
+
+            const matchName = !nameFilter || name.includes(nameFilter);
+            const matchMiddle = !middlenameFilter || middlename.includes(middlenameFilter);
+            const matchEmail = !emailFilter || email.includes(emailFilter);
+
+            row.style.display = (matchName && matchMiddle && matchEmail) ? "" : "none";
+        });
+    }
+
+    document.getElementById("filterName").addEventListener("input", applyFilters);
+    document.getElementById("filterMiddlename").addEventListener("input", applyFilters);
+    document.getElementById("filterEmail").addEventListener("input", applyFilters);
+    </script>
+
+
+</body>
+</html>
