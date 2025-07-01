@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Processando CSV</title>
+    <meta charset="UTF-8">
+    <script>
+        function checkProgress(uploadId) {
+            fetch(`/progress-status?id=${uploadId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const bar = document.getElementById("progressBar");
+                    const text = document.getElementById("progressText");
+
+                    bar.style.width = data.progress + "%";
+                    text.innerText = `Progresso: ${data.progress}%`;
+
+                    if (data.completed) {
+                        window.location.href = `/upload-result?id=${uploadId}`;
+                    } else {
+                        setTimeout(() => checkProgress(uploadId), 1500);
+                    }
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const uploadId = document.getElementById("uploadId").value;
+            checkProgress(uploadId);
+        });
+    </script>
+
+    <style>
+        .progress-bar {
+            width: 0%;
+            height: 25px;
+            background-color: green;
+            transition: width 0.5s;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>Estamos processando seus dados...</h2>
+<input type="hidden" id="uploadId" th:value="${uploadId}" />
+<div class="progress-container">
+    <div id="progressBar" class="progress-bar"></div>
+</div>
+<p id="progressText">Progresso: 0%</p>
+</body>
+</html>
