@@ -1,7 +1,5 @@
 HELP.md
-devdocker-compose.yml
-target/
-exports/
+docker-compose.yml
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
