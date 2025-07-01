@@ -46,7 +46,7 @@ public class PersonService implements IPersonService {
             var batch = processingList.subList(i, end);
 
             // simulation
-            System.out.println("🟡 Processando lote de " + batch.size() + " registros (de " + i + " até " + (end - 1) + ")");
+            //System.out.println("🟡 Processando lote de " + batch.size() + " registros (de " + i + " até " + (end - 1) + ")");
             batch.forEach(p -> System.out.println(" - " + p.getName()));
 
 

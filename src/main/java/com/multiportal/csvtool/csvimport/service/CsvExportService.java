@@ -5,7 +5,6 @@ import com.multiportal.csvtool.csvimport.Interfaces.ICsvExportService;
 import com.multiportal.csvtool.csvimport.model.CsvExportEntity;
 import com.multiportal.csvtool.csvimport.model.PersonEntity;
 import com.multiportal.csvtool.csvimport.repository.ICsvExportRepository;
-import com.multiportal.csvtool.csvimport.repository.ICsvUploadRepository;
 import com.multiportal.csvtool.csvimport.repository.IPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,21 +26,21 @@ import java.util.UUID;
 public class CsvExportService implements ICsvExportService {
     @Autowired
     private ICsvExportRepository exportRepository;
-    //private ICsvUploadRepository uploadRepository;
+
 
     @Autowired
     private IPersonRepository personRepository;
 
     @Override
     public UUID startExport(UUID uploadId) {
-        CsvExportEntity job = new CsvExportEntity();
-        job.setUploadId(uploadId);
-        job.setStatus(ExportStatus.PROCESSING);
-        job = exportRepository.save(job);
+        CsvExportEntity data = new CsvExportEntity();
+        data.setUploadId(uploadId);
+        data.setStatus(ExportStatus.PROCESSING);
+        data = exportRepository.save(data);
 
         //starts exports
-        exportCsvAsync(uploadId,job.getId());
-        return job.getId();
+        exportCsv(uploadId,data.getId());
+        return data.getId();
     }
     public CsvExportEntity findExport(UUID id ){
         return exportRepository.findById(id).orElseThrow(
@@ -49,7 +48,7 @@ public class CsvExportService implements ICsvExportService {
     }
 
     @Async
-    private void exportCsvAsync(UUID uploadId, UUID exportId) {
+    private void exportCsv(UUID uploadId, UUID exportId) {
         try {
             //search csv history, to manage and show the progress for user
             CsvExportEntity process = exportRepository.findById(exportId)
